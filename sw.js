@@ -41,23 +41,18 @@ chrome.action.onClicked.addListener(async (tab) => {
       await chrome.scripting
         .executeScript({
           target: { tabId: tab.id },
-          files: [
-            "scripts/functions.js",
-            "scripts/messaging.js",
-            "scripts/content.js",
-            "scripts/listeners.js",
-            "scripts/reader.js",
-            "scripts/draggable.js",
-          ],
+          files: ["scripts/content.js", "scripts/draggable.js"],
         })
-        .then(() => console.log("script injected"));
+        .then(() => {
+          console.log("main script injected");
+        });
 
-      await chrome.scripting
-        .insertCSS({
-          target: { tabId: tab.id },
-          files: ["css/main.css"],
-        })
-        .then(() => console.log("script injected"));
+      //   await chrome.scripting
+      //     .insertCSS({
+      //       target: { tabId: tab.id },
+      //       files: ["css/main.css"],
+      //     })
+      //     .then(() => console.log("script injected"));
     } else if (nextState === "OFF") {
       await chrome.scripting
         .executeScript({
