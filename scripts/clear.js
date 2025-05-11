@@ -4,7 +4,7 @@
 
 console.log("clearance script called");
 document.getElementById("transparentOverlayCanvas").remove();
-
+document.getElementById("controls-box").remove();
 // // remove double tap listeners
 // document.removeEventListener("pointerup", detectDoubleTap(500));
 // //Message all iframes

@@ -1,55 +1,75 @@
-// content.js - This script will be injected into the webpage
-if (typeof documentHeight === "undefined") {
-  console.log("wasn't defined");
-  var documentHeight = `${Math.max(
+// need to get and set local Storage to preserve data
+// also would allow sharign via server and API
+
+// localStorage.setItem("extensionState", JSON.stringify(extensionState));
+// extensionState = JSON.parse(localStorage.getItem("extensionState"));
+
+// Extension state globals
+var documentHeight;
+var canvas;
+var ctx;
+var storedPaths = [];
+var newPath = [];
+var color = "blue";
+var stroke = 6;
+
+// Use to get updated vertical scroll height for webpage
+// called on resize to get correct proportions
+function getDocumentHeight() {
+  return `${Math.max(
     document.body.scrollHeight,
     document.documentElement.scrollHeight,
     document.body.offsetHeight,
     document.documentElement.offsetHeight,
     document.documentElement.clientHeight
   )}px`;
-  console.log(innerHeight, documentHeight);
-} else {
-  console.log(innerHeight, documentHeight);
 }
 
+// Add the transparent canvas to the webpage
 function addTransparentCanvas() {
-  // Check if a canvas with the ID 'transparentOverlayCanvas' already exists
+  // 1. Check if a canvas with the ID 'transparentOverlayCanvas' already exists
   let existingCanvas = document.getElementById("transparentOverlayCanvas");
   if (existingCanvas) {
-    return; // Don't add another one
+    return;
   }
 
-  // 1. Create the canvas element
-  const canvas = document.createElement("canvas");
+  // 2. Create canvas and allow global
+  var canvas = document.createElement("canvas");
   canvas.id = "transparentOverlayCanvas";
 
-  // 2. Set its position and styling
-  canvas.style.position = "absolute"; // Cover the entire viewport
+  // 3. Set styling and position
+  canvas.style.position = "absolute";
   canvas.style.top = "0";
   canvas.style.left = "0";
-  canvas.style.width = "100%";
+  canvas.style.width = window.innerWidth;
   canvas.style.height = documentHeight;
-  canvas.style.pointerEvents = "none"; // Allow interaction with elements underneath
   canvas.style.zIndex = "10000000000"; // Ensure it's on top of other elements
   canvas.style.background = "transparent";
   canvas.style.pointerEvents = "auto"; // Make it interactive
-  // canvas.style.border = "1px solid red";
+  canvas.style.border = "1px solid red";
   canvas.style.overflow = "y-scroll";
 
-  // 3. Append it to the DOM (usually the body)
-
+  // 4. Append it to the DOM
   document.body.appendChild(canvas);
 
-  // Get the 2D rendering context
-  const ctx = canvas.getContext("2d");
+  // 5. Set the 2D rendering context as global
+  var ctx = canvas.getContext("2d");
 }
 
+// create a draggable control element for settings/share etc
 function createControls() {
+  // 1. If it already exists from ON/OFF remove
+  let controlsExists = document.getElementById("controls-box");
+  controlsExists ? document.getElementById("controls-box").remove() : null;
+
+  // 2. Create the controls element
   var controls = document.createElement("div");
   controls.id = "controls-box";
 
-  // 2. Set its position and styling
+  // 3. Add innerHTML elements use class .controls to stop dragging on use
+  controls.insertAdjacentHTML("afterbegin", `<div> TEST HERE </div>`);
+
+  // 4. Set start position and styling
   controls.style.position = "fixed"; // Cover the entire viewport
   controls.style.top = "1vh";
   controls.style.left = "1vw";
@@ -59,23 +79,43 @@ function createControls() {
   controls.style.background = "grey";
   controls.style.border = "5px solid red";
 
-  controls.insertAdjacentHTML("afterbegin", `<div> TEST HERE </div>`);
-  // 3. Append it to the DOM (usually the body)
-
+  // 4. Append it to the DOM (usually the body)
   document.body.appendChild(controls);
 }
 
+// Add listeners for drawing controls
 function setupDrawingOnPointerDown() {
   console.log("drawing control added");
-  const canvas = document.getElementById("transparentOverlayCanvas");
+  canvas = document.getElementById("transparentOverlayCanvas");
   if (!canvas) {
     console.error("Transparent canvas not found!");
     return;
   }
-  const ctx = canvas.getContext("2d");
+  ctx = canvas.getContext("2d");
   let isDrawing = false;
   let lastX = 0;
   let lastY = 0;
+  var newPath = [];
+
+  // redraw from state
+  if (storedPaths) {
+    console.log("previous annotations found redrawing");
+    console.log(storedPaths);
+    // cycle through each path stored in storePaths
+    storedPaths.forEach((path) => {
+      // 1. get proportion changes to remap (use ratio?) should probably be in state
+      // 2. apply a proportional mapping incase of scrrensize change?
+      // 3. Redraw the paths using canvas
+      ctx.beginPath();
+      path.forEach((coord) => {
+        ctx.moveTo(coord[0], coord[1]);
+        ctx.lineTo(coord[0], coord[1]);
+        ctx.strokeStyle = color;
+        ctx.lineWidth = stroke;
+        ctx.stroke();
+      });
+    });
+  }
 
   function startDrawing(e) {
     isDrawing = true;
@@ -87,21 +127,26 @@ function setupDrawingOnPointerDown() {
 
   function drawLine(e) {
     if (!isDrawing) return;
-    const offSetY = window.scrollY;
+    let offSetY = window.scrollY;
 
-    console.log("offset is", offSetY);
-    console.log("drawing at ", lastX, lastY);
+    // console.log("offset is", offSetY);
+    // console.log("drawing at ", lastX, lastY);
     ctx.beginPath();
     ctx.moveTo(lastX, lastY);
     ctx.lineTo(e.clientX, e.clientY + offSetY);
-    ctx.strokeStyle = "red"; // You can customize the color
-    ctx.lineWidth = 3; // You can customize the line width
+    ctx.strokeStyle = color; // You can customize the color
+    ctx.lineWidth = stroke; // You can customize the line width
     ctx.stroke();
     [lastX, lastY] = [e.clientX, e.clientY + offSetY];
+    newPath.push([lastX, lastY]);
   }
 
   function stopDrawing() {
     isDrawing = false;
+    // push drawings to a store?
+    console.log(newPath);
+    storedPaths.push(newPath);
+    console.log(storedPaths);
   }
 
   // Add event listeners to the canvas
@@ -113,37 +158,48 @@ function setupDrawingOnPointerDown() {
 
 // Call this function after the transparent canvas has been added to the DOM
 function initializeExtension() {
-  // Check if the canvas exists yet, if not, try again after a short delay
+  // 1. get an accurate measure of page
+  documentHeight = getDocumentHeight();
+
+  // 2. Check if the canvas exists yet, if not, try again after a short delay
   const canvasCheckInterval = setInterval(() => {
     createControls();
     const canvas = document.getElementById("transparentOverlayCanvas");
+    // If element is loaded then build it out
     if (canvas) {
       clearInterval(canvasCheckInterval);
       setupDrawingOnPointerDown();
       documentHeight = document.documentElement.scrollHeight; // Try this first
       canvas.height = documentHeight;
       canvas.width = window.innerWidth;
-
-      // Optionally, you might want to resize the canvas on load as well
-      //   canvas.width = window.innerWidth;
-      //   canvas.height = documentHeight;
     }
-  }, 100); // Check every 100 milliseconds
+  }, 100);
 }
 
+// Add canvas called
 addTransparentCanvas();
-
-// // Call the initialize function
+// Call the initialize function
 initializeExtension();
 
 // You might still want to keep the resize listener from the previous example
 window.addEventListener("resize", () => {
-  const canvas = document.getElementById("transparentOverlayCanvas");
   if (canvas) {
-    canvas.width = window.innerWidth;
-    canvas.height = documentHeight;
-    const ctx = canvas.getContext("2d");
-    // You might need to redraw the existing content on resize if needed
-    // For a simple drawing app, you might not need to redraw everything
+    document.getElementById("transparentOverlayCanvas").remove();
+    addTransparentCanvas();
+    initializeExtension();
+
+    // documentHeight = getDocumentHeight();
+    // console.log("recalculated required height", documentHeight);
+    // canvas.width = window.innerWidth;
+    // canvas.height = documentHeight;
+
+    // // **Crucially, get the context again after resizing**
+    // ctx = canvas.getContext("2d");
+
+    // // **Redraw your content here if needed**
+    // // Example:
+    // // if (yourDrawingData) {
+    // //   redrawCanvas(ctx, yourDrawingData, canvas.width, canvas.height);
+    // // }
   }
 });
