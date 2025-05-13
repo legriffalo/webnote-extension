@@ -91,30 +91,45 @@ function setupDrawingOnPointerDown() {
     console.error("Transparent canvas not found!");
     return;
   }
+  // set up all canvas settings/data and variables to handle
   ctx = canvas.getContext("2d");
   let isDrawing = false;
   let lastX = 0;
   let lastY = 0;
   var newPath = [];
 
-  // redraw from state
-  if (storedPaths) {
-    console.log("previous annotations found redrawing");
+  function drawStoredPaths() {
+    // check if there are stored paths to draw
+    storedPaths = JSON.parse(localStorage.getItem("storedPaths"));
     console.log(storedPaths);
-    // cycle through each path stored in storePaths
-    storedPaths.forEach((path) => {
-      // 1. get proportion changes to remap (use ratio?) should probably be in state
-      // 2. apply a proportional mapping incase of scrrensize change?
-      // 3. Redraw the paths using canvas
-      ctx.beginPath();
-      path.forEach((coord) => {
-        ctx.moveTo(coord[0], coord[1]);
-        ctx.lineTo(coord[0], coord[1]);
-        ctx.strokeStyle = color;
-        ctx.lineWidth = stroke;
-        ctx.stroke();
+    // redraw from state
+    if (storedPaths != null) {
+      console.log("previous annotations found redrawing");
+      console.log(storedPaths);
+
+      storedPaths.forEach((path) => {
+        // cycle through each path stored in storePaths
+        ctx.beginPath();
+
+        if (path.length > 0) {
+          ctx.moveTo(path[0][0], path[0][1]); // Move to the starting point
+
+          for (let i = 1; i < path.length; i++) {
+            // Start from the second point
+            const [x, y] = path[i];
+            ctx.lineTo(x, y); // Draw a line to the current point
+          }
+          ctx.strokeStyle = "blue";
+          ctx.lineWidth = 3;
+          ctx.stroke();
+          // ctx.closePath();
+        } else {
+          console.log("skipped blank path");
+        }
       });
-    });
+    } else {
+      storedPaths = [];
+    }
   }
 
   function startDrawing(e) {
@@ -146,7 +161,9 @@ function setupDrawingOnPointerDown() {
     // push drawings to a store?
     console.log(newPath);
     storedPaths.push(newPath);
+    newPath = [];
     console.log(storedPaths);
+    localStorage.setItem("storedPaths", JSON.stringify(storedPaths));
   }
 
   // Add event listeners to the canvas
@@ -154,6 +171,8 @@ function setupDrawingOnPointerDown() {
   canvas.addEventListener("pointermove", drawLine);
   canvas.addEventListener("pointerup", stopDrawing);
   canvas.addEventListener("pointerleave", stopDrawing);
+
+  setTimeout(() => drawStoredPaths(), 500);
 }
 
 // Call this function after the transparent canvas has been added to the DOM
