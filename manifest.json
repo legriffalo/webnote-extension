@@ -3,7 +3,7 @@
     "name": "Univeral Markup Extension",
     "version": "1.0",
     "description": "Adds a transparent canvas to the webpage.",
-    "permissions": ["activeTab","tabs","scripting","storage"],
+    "permissions": ["windows","activeTab","tabs","scripting","storage"],
     "host_permissions": ["*://*/*"],
 
     "background": {
@@ -26,7 +26,7 @@
     "web_accessible_resources":[{
         "matches": ["http://*/*", "https://*/*"],
         "resources": [
-            "images/icon48.png","scripts/content.js", "scripts/draggable.js"
+            "images/icon48.png","content.js", "scripts/draggable.js", "html/ui.html", "css/output.css"
         ]
     }]
     

@@ -1,0 +1,210 @@
+<html>
+
+<head>
+    <style>
+        body {
+            font-size: 12px;
+        }
+
+        #controls {
+            max-height: 25vh;
+            margin-left: 2px;
+        }
+
+        .sbs {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .header {
+            background-color: #ddd;
+            height: 10vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+        }
+
+        .flip {
+            width: 10vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+        }
+
+        #head {
+            width: 100%;
+
+        }
+
+        #logo {
+            height: 10vh;
+        }
+
+        h3 {
+            color: #9C0D38;
+            font-size: 20px;
+            width: 95%;
+            margin: auto;
+            text-align: center;
+            margin-top: 4px;
+            margin-bottom: 2px;
+            background-color: #ddd;
+
+        }
+
+        h1 {
+            font-size: 4.5vh;
+            width: 90%;
+            margin: auto;
+            text-align: center;
+            color: #F25F5C;
+            text-transform: uppercase;
+            -webkit-text-fill-color: white;
+            -webkit-text-stroke-color: #F25F5C;
+            -webkit-text-stroke-width: 0.2vh;
+
+        }
+
+        h4 {
+            font-size: 2vh;
+            width: 10vh;
+            height: 10vh;
+            margin: auto;
+            text-align: center;
+            color: #9C0D38;
+            transform: rotate(90deg) translate(0.5vh);
+        }
+
+        #section1 {
+            margin-top: 12vh;
+            margin-bottom: 1vh;
+            min-height: 10vh;
+        }
+
+        #section2 {
+            min-height: 30vh;
+            margin-bottom: 1vh;
+
+        }
+
+        #section3 {
+            min-height: 30vh;
+            margin-bottom: 1vh;
+
+        }
+
+        .attention {
+            background-color: #9C0D38;
+            color: #ddd;
+            font-size: 10px;
+            height: 40px;
+            text-align: center;
+            align-content: center;
+        }
+
+        table {
+            font-size: 12px;
+            table-layout: fixed;
+            border-style: solid;
+        }
+
+        tr {
+            min-height: 20px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            font-size: 20px;
+            text-align: center;
+            background-color: #1C3144;
+            color: white;
+        }
+
+        td:nth-child(odd) {
+            width: 45%
+        }
+
+        #nope {
+            color: red;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div class="sbs header">
+        <h1 id="head">Webnote</h1>
+        <div class="flip">
+            <h4>by Data Ronin</h4>
+        </div>
+        <img id="logo" src="../images/icon48.png">
+    </div>
+
+    <div id="section1">
+        <p>The purpose of this extension is simple, allow quick mark up and sharing of web resources on the web!</p>
+
+        <p> Webnote is built around very simple keybindings and controls</p>
+    </div>
+
+
+    <h3>controls/features</h3>
+    <div id="section2">
+        <div class='sbs'>
+            <ul>
+                <li><b>Hide:</b> Minify the control panel </li>
+                <li><b>Share button:</b>Push your markups to a database and generate a share code</li>
+                <li><b>Width input:</b> Locks the screen width to ensure shared mark ups read the same for evryone</li>
+                <li><b>Layers:</b> Create mark up layers to break down complex info, or accomodate numerous screen
+                    widths/breakpoints </li>
+                <li><b>Save :</b> Update your shared mark ups on the db </li>
+
+
+            </ul>
+        </div>
+
+    </div>
+
+
+    <h3> Hotkeys </h3>
+    <div id="section3">
+        <table>
+            <tr>
+                <th>hotkey</th>
+                <th>Function</th>
+            </tr>
+            <tr>
+                <td><b>ctrl + M</b></td>
+                <td>open webnote</td>
+            </tr>
+            <tr>
+                <td><b>ctrl + shft + h</b></td>
+                <td>come back here to see hotkeys</td>
+            </tr>
+
+
+
+        </table>
+    </div>
+
+
+
+    <div class="attention">
+        <p> Return here at any time by pressing ctrl+ shift + h </p>
+    </div>
+</body>
+
+</html>
