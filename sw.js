@@ -41,7 +41,12 @@ chrome.action.onClicked.addListener(async (tab) => {
       await chrome.scripting
         .executeScript({
           target: { tabId: tab.id },
-          files: ["content.js", "scripts/draggable.js"],
+          files: [
+            "scripts/setupui.js",
+            "content.js",
+            "scripts/draggable.js",
+            "scripts/hotkeys.js",
+          ],
         })
         .then(() => {
           console.log("main script injected");

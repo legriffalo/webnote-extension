@@ -86,68 +86,6 @@ function addTransparentCanvas() {
   var ctx = canvas.getContext("2d");
 }
 
-// create a draggable control element for settings/share etc
-function createControls() {
-  // 1. If it already exists from ON/OFF remove
-  let controlsExists = document.getElementById("controls-box");
-  controlsExists ? document.getElementById("controls-box").remove() : null;
-
-  // 2. Create the controls element
-  var controls = document.createElement("div");
-  controls.id = "controls-box";
-
-  // 3. Add innerHTML elements use class .controls to stop dragging on use
-  // controls.insertAdjacentHTML("afterbegin", `<div> TEST HERE </div>`);
-  injectHTMLFromFile("html/ui.html", "#controls-box");
-
-  // 4. Set start position and styling
-  controls.style.position = "fixed"; // Cover the entire viewport
-  controls.style.top = "1vh";
-  controls.style.left = "1vw";
-  controls.style.zIndex = "10000000001"; // Ensure it's on top of other elements
-
-  // 4. Append it to the DOM (usually the body)
-  document.body.appendChild(controls);
-  // setUpUIControls();
-}
-
-function setUpUIControls() {
-  const minified = document.getElementById("webdraw-minified");
-  const fullSize = document.getElementById("webdraw-full");
-  const toggleButton = document.getElementById("toggle-button");
-
-  minified.addEventListener("dblclick", () => {
-    minified.classList.add("hidden");
-    fullSize.classList.remove("hidden");
-  });
-
-  toggleButton.addEventListener("pointerdown", () => {
-    fullSize.classList.add("hidden");
-    minified.classList.remove("hidden");
-  });
-
-  const draggableImage = document.getElementById("webdraw-minified-image");
-
-  if (draggableImage) {
-    draggableImage.addEventListener("dragstart", (event) => {
-      // Prevent the browser's default drag-and-drop behavior for this image
-      event.preventDefault();
-
-      // You can optionally add your custom drag logic here
-      console.log("Custom drag started for the image.");
-      // For example, you might want to store some data related to the dragged image:
-      // event.dataTransfer.setData('text/plain', 'Image ID: my-draggable-image');
-    });
-
-    // You might also want to handle the 'dragend' event if you have custom cleanup
-    draggableImage.addEventListener("dragend", (event) => {
-      console.log("Custom drag ended for the image.");
-      // Perform any cleanup or actions after the drag ends
-    });
-  } else {
-    console.warn("Image with ID 'my-draggable-image' not found.");
-  }
-}
 // Add listeners for drawing controls
 function setupDrawingOnPointerDown() {
   console.log("drawing control added");
@@ -307,55 +245,9 @@ function initializeExtension() {
       extensionState.resY = documentWidth;
     }
   }, 100);
-
-  // Example usage: Inject 'my_template.html' into an element with the ID 'injection-point'
-}
-
-// inject the html ui
-// content.js
-
-async function injectHTMLFromFile(htmlFilePath, targetSelector) {
-  try {
-    const response = await fetch(chrome.runtime.getURL(htmlFilePath));
-    if (!response.ok) {
-      console.error(`Failed to fetch HTML file: ${response.status}`);
-      return;
-    }
-    const htmlContent = await response.text();
-    const targetElement = document.querySelector(targetSelector);
-
-    if (targetElement) {
-      // inject all html into element
-      targetElement.innerHTML = htmlContent;
-      // call to add listeners
-      setUpUIControls();
-
-      const localImage = targetElement.querySelector("#webdraw-minified-image");
-      if (localImage) {
-        localImage.src = chrome.runtime.getURL("images/icon48.png");
-        console.log("image loading");
-      }
-    } else {
-      console.warn(`Target element "${targetSelector}" not found.`);
-    }
-  } catch (error) {
-    console.error("Error fetching or injecting HTML:", error);
-  }
 }
 
 // Add canvas called
 addTransparentCanvas();
 // Call the initialize function
 initializeExtension();
-
-// Listen for resize and rebuild extension to fit new dimensions
-window.addEventListener("resize", () => {
-  if (canvas) {
-    canvas.remove();
-    addTransparentCanvas();
-    initializeExtension();
-  }
-});
-
-// test the messaging function and listener system
-// chrome.runtime.sendMessage({ message: "help" });

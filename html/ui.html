@@ -1,36 +1,37 @@
+<!-- This element is injected in to the draggable ui element to make ui elements -->
 <div id="webdraw-full" class="main">
+
+    <!-- This is made active in the setupui file and has listeners for hide and help window -->
     <div id="header">
-
         <h1>Webdraw</h1>
-
         <div class="w-1/3 flex flex-col gap-1 p-1">
-            <div id="toggle-button" class="top-button">hide</div>
-            <div id="help-button" class="top-button">help</div>
+            <button id="webdraw-toggle-button" class="top-button">hide</button>
+            <button id="webdraw-help-button" class="top-button">help</button>
         </div>
+    </div>
+
+    <!-- Input share codes here this will need to have a listener for change attached to call api -->
+    <div class=" border w-full h-1/5 flex flex-col items-center py-1 rounded-xl">
+        <span class="my-1 p-0 h-1/5 text-sm leading-tight">Input a share code to load markup</span>
+        <input class="webdraw-input-box" placeholder="paste sharecode here...">
 
     </div>
 
-    <div class="mt-[1vh] w-full h-1/5 flex flex-col items-center gap-[1vh]">
-
-        <p>Input a share code to load markup</p>
-        <input class="input-box" placeholder="use share code?">
-
+    <!-- Layers of annotation will be shown here to be managed  -->
+    <div id="webdraw-layers">
+        <span class="my-1 p-0 h-1/5 text-sm leading-tight">Your annotation layers</span>
+        <div id="webdraw-layers-table" class="w-full border">
+        </div>
     </div>
 
-
-    <h3> View annotation layers here</h3>
-
-    <div id="layers">
-
-        <div class="web-draw-info">test</div>
-    </div>
-
-    <div id="footer" class="w-full flex flex-row gap-[3vw]">
+    <!-- Footer with share button and resolution changer will also need to use api calls -->
+    <div id="webdraw-footer" class="w-full flex flex-row gap-[3vw]">
         <div class="w-1/2 flex flex-row gap-1">
             <button class="ext-button">Share</button>
             <button class="ext-button">Save</button>
         </div>
-
+        <!-- This will need to be auto set on use of a share code but also dynamically 
+         resize the window and start new layer when changed buy the user -->
         <div id="res-input" class="w-full">
             <input placeholder="width = 1000px">
         </div>

@@ -11,7 +11,6 @@
     },
 
     "icons": {
-      "32": "images/icon36.png",
       "48": "images/icon48.png",
       "128": "images/icon128.png"
     },
@@ -26,7 +25,14 @@
     "web_accessible_resources":[{
         "matches": ["http://*/*", "https://*/*"],
         "resources": [
-            "images/icon48.png","content.js", "scripts/draggable.js", "html/ui.html", "css/output.css"
+            "images/icon48.png",
+            "content.js",
+            "scripts/setupui.js",
+            "scripts/draggable.js",
+            "html/ui.html", 
+            "html/layer.html",
+            "css/output.css",
+            "scripts/hotkeys.js"
         ]
     }]
     
