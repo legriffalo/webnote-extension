@@ -1,4 +1,8 @@
-// utility function to provide a listener for tap events
+// This code handles the injection and rendering of the
+// UI elements for the application functions in this file
+// are called from the content.js file
+
+// Utility function to provide a listener for double tap events
 function detectDoubleTap(doubleTapMs) {
   let timeout,
     lastTap = 0;
@@ -20,6 +24,7 @@ function detectDoubleTap(doubleTapMs) {
 }
 
 // initialize double tap listener
+// this shoudl potentially move ot another file for maintainability
 document.addEventListener("pointerup", detectDoubleTap(300));
 
 //utility function ot inject html objects in to ui
@@ -49,38 +54,6 @@ async function injectHTMLFromFile(htmlFilePath, targetSelector) {
   } catch (error) {
     console.error("Error fetching or injecting HTML:", error);
   }
-}
-
-function createControls() {
-  // 1. If it already exists from ON/OFF remove
-  let controlsExists = document.getElementById("controls-box");
-  controlsExists ? document.getElementById("controls-box").remove() : null;
-
-  // 2. Create the controls element
-  var controls = document.createElement("div");
-  controls.id = "controls-box";
-
-  // 3. Add innerHTML elements use class .controls to stop dragging on use
-  Promise.all([
-    injectHTMLFromFile("html/ui.html", "#controls-box"),
-    injectHTMLFromFile("html/layer.html", "#webdraw-layers-table"),
-  ])
-    .then(() => {
-      // 4. Set start position and styling
-      controls.style.position = "fixed"; // Cover the entire viewport
-      controls.style.top = "1vh";
-      controls.style.left = "1vw";
-      controls.style.zIndex = "10000000001"; // Ensure it's on top of other elements
-
-      // 5. Append it to the DOM (usually the body)
-      document.body.appendChild(controls);
-
-      // 6. Call to add listeners ONLY ONCE after all HTML is injected AND appended
-      setUpUIControls();
-    })
-    .catch((error) => {
-      console.error("Error during HTML injection:", error);
-    });
 }
 
 // Called to create a draggable control element for settings/share etc
@@ -114,6 +87,7 @@ async function createControls() {
   }, 300);
 }
 
+// Adding all the required listeners to the UI
 function setUpUIControls() {
   // add listeners to the elements in the core ui
   const minified = document.getElementById("webdraw-minified");
