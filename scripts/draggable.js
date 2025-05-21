@@ -52,11 +52,11 @@ setTimeout(() => {
   };
 
   // check if drag behaviour should be ignored
-  // this is controled by adding the class "controls"
+  // this is controled by adding the class "webdraw-controls"
   function controls(e) {
     // console.log(e.target.classList)
     cl = e.target.classList;
-    return cl.contains("controls");
+    return cl.contains("webdraw-controls");
   }
 
   var box = document.getElementById("controls-box");

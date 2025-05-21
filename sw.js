@@ -1,4 +1,9 @@
-//run each time extension is loaded (browser start up)
+// Service worker back gorund file, handles
+// -- managing chrome window
+// -- managing cross device memory
+// -- opening required html files for install/help [and data management (ver2)]
+
+//Run each time extension is loaded (browser start up)
 // to show that reader is available and inactive
 console.log("service worker in for net notes");
 chrome.action.setBadgeText({

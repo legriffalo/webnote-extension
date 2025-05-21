@@ -137,14 +137,14 @@ function setupDrawingOnPointerDown() {
         // get the res for each path
         let prevHeight = path.resX;
         let prevWidth = path.resY;
-        // let yTransform = documentHeight - prevHeight;
-        // let xTransform = documentWidth / prevWidth;
+        let yTransform = documentHeight - prevHeight;
+        let xTransform = documentWidth / prevWidth;
         // console.log(
         //   "transformation due to screen change ",
         //   xTransform,
         //   yTransform
         // );
-        let coords = path.path.map(([x, y]) => [x, y]);
+        let coords = path.path.map(([x, y]) => [x * xTransform, y]);
         if (coords.length > 0) {
           ctx.moveTo(coords[0][0], coords[0][1]); // Move to the starting point
 

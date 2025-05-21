@@ -23,7 +23,18 @@
         <div id="webdraw-layers-table" class="w-full border">
         </div>
     </div>
-
+    <!--Color picker -->
+    <div id="webdraw-drawing-controls" class="w-full flex flex-col items-center py-2 gap-2 border-t">
+        <div class="w-full flex flex-row justify-center items-center gap-4">
+            <label for="webdraw-color-picker" class="text-sm">Color:</label>
+            <input type="color" id="webdraw-color-picker" value="#00FF00" class="w-1/4">
+        </div>
+        <div class="webdraw-controls w-full flex flex-row justify-center items-center gap-4">
+            <label for="webdraw-thickness-slider" class="text-sm">Thickness:</label>
+            <input type="range" id="webdraw-thickness-slider" min="1" max="20" value="3" class="webdraw-controls w-1/2">
+            <span id="webdraw-thickness-value" class="text-sm">3</span>
+        </div>
+    </div>
     <!-- Footer with share button and resolution changer will also need to use api calls -->
     <div id="webdraw-footer" class="w-full flex flex-row gap-[3vw]">
         <div class="w-1/2 flex flex-row gap-1">
