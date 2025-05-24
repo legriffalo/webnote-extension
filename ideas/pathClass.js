@@ -44,15 +44,11 @@ class Path {
    * @param {number} currentWidth - The current window width for transformation.
    */
   draw(ctx, currentHeight, currentWidth) {
-    const transformedPath = this.getTransformedPath(
-      currentHeight,
-      currentWidth
-    );
-    if (transformedPath.length > 0) {
+    if (this.path.length > 0) {
       ctx.beginPath();
-      ctx.moveTo(transformedPath[0][0], transformedPath[0][1]);
-      for (let i = 1; i < transformedPath.length; i++) {
-        const [x, y] = transformedPath[i];
+      ctx.moveTo(this.path[0][0], this.path[0][1]);
+      for (let i = 1; i < this.path.length; i++) {
+        const [x, y] = this.path[i];
         ctx.lineTo(x, y);
       }
       ctx.strokeStyle = this.color;
