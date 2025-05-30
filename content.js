@@ -15,7 +15,8 @@
 
 // newPath = {
 //   color: "",
-//   stroke: "",
+//   stroke: ,
+//   opacity: ,
 //   path: [],
 // };
 
@@ -40,6 +41,7 @@ var placeholderState = {
   shared: false,
   color: "green",
   stroke: 3,
+  opacity: 1.0,
   resX: documentHeight,
   resY: documentWidth,
 };
@@ -153,8 +155,12 @@ function setupDrawingOnPointerDown() {
             const [x, y] = coords[i];
             ctx.lineTo(x, y); // Draw a line to the current point
           }
-          ctx.strokeStyle = extensionState.color;
-          ctx.lineWidth = extensionState.stroke;
+          // ctx.strokeStyle = extensionState.color;
+          // ctx.lineWidth = extensionState.stroke;
+          // ctx.globalAlpha = extensionState.opacity;
+          ctx.strokeStyle = path.color;
+          ctx.lineWidth = path.stroke;
+          ctx.globalAlpha = path.opacity;
           ctx.stroke();
           // ctx.closePath();
         } else {
@@ -185,9 +191,13 @@ function setupDrawingOnPointerDown() {
     ctx.lineTo(e.clientX, e.clientY + offSetY);
     ctx.strokeStyle = extensionState.color; // You can customize the color
     ctx.lineWidth = extensionState.stroke; // You can customize the line width
+    ctx.globalAlpha = extensionState.opacity;
     ctx.stroke();
     [lastX, lastY] = [e.clientX, e.clientY + offSetY];
     // update the path object
+    newPath.color = extensionState.color;
+    newPath.stroke = extensionState.stroke;
+    newPath.opacity = extensionState.opacity;
     newPath.path.push([lastX, lastY]);
   }
 

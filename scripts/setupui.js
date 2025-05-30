@@ -94,6 +94,9 @@ function setUpUIControls() {
   const fullSize = document.getElementById("webdraw-full");
   const toggleButton = document.getElementById("webdraw-toggle-button");
   const helpButton = document.getElementById("webdraw-help-button");
+  const colorPicker = document.getElementById("webdraw-color-picker");
+  const thicknessSlider = document.getElementById("webdraw-thickness-slider");
+  const opacitySlider = document.getElementById("webdraw-opacity-slider");
 
   minified.addEventListener("doubletap", () => {
     minified.classList.add("hidden");
@@ -109,6 +112,22 @@ function setUpUIControls() {
   helpButton.addEventListener("click", () => {
     console.log("help clicked ");
     chrome.runtime.sendMessage({ message: "help" });
+  });
+
+  colorPicker.addEventListener("change", () => {
+    extensionState.color = colorPicker.value;
+  });
+
+  thicknessSlider.addEventListener("change", () => {
+    extensionState.stroke = thicknessSlider.value;
+    document.getElementById("webdraw-thickness-value").textContent =
+      thicknessSlider.value;
+  });
+
+  opacitySlider.addEventListener("change", () => {
+    extensionState.opacity = opacitySlider.value;
+    document.getElementById("webdraw-opacity-value").textContent =
+      opacitySlider.value;
   });
 
   // make the miinified ui be draggable without issues
