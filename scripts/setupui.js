@@ -97,6 +97,9 @@ function setUpUIControls() {
   const colorPicker = document.getElementById("webdraw-color-picker");
   const thicknessSlider = document.getElementById("webdraw-thickness-slider");
   const opacitySlider = document.getElementById("webdraw-opacity-slider");
+  const deleteButton = document.getElementById("delete-button");
+  const shareButton = document.getElementById("delete-button");
+  const saveButton = document.getElementById("delete-button");
 
   minified.addEventListener("doubletap", () => {
     minified.classList.add("hidden");
@@ -128,6 +131,18 @@ function setUpUIControls() {
     extensionState.opacity = opacitySlider.value;
     document.getElementById("webdraw-opacity-value").textContent =
       opacitySlider.value;
+  });
+
+  deleteButton.addEventListener("pointerdown", () => {
+    console.log("delete called");
+  });
+
+  shareButton.addEventListener("pointerdown", () => {
+    console.log("share called");
+  });
+
+  saveButton.addEventListener("pointerdown", () => {
+    console.log("save called");
   });
 
   // make the miinified ui be draggable without issues
