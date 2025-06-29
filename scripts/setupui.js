@@ -98,8 +98,8 @@ function setUpUIControls() {
   const thicknessSlider = document.getElementById("webdraw-thickness-slider");
   const opacitySlider = document.getElementById("webdraw-opacity-slider");
   const deleteButton = document.getElementById("delete-button");
-  const shareButton = document.getElementById("delete-button");
-  const saveButton = document.getElementById("delete-button");
+  const shareButton = document.getElementById("share-button");
+  const saveButton = document.getElementById("save-button");
 
   minified.addEventListener("doubletap", () => {
     minified.classList.add("hidden");
@@ -134,15 +134,15 @@ function setUpUIControls() {
   });
 
   deleteButton.addEventListener("pointerdown", () => {
-    console.log("delete called");
+    deleteDrawings();
   });
 
   shareButton.addEventListener("pointerdown", () => {
-    console.log("share called");
+    shareToServer();
   });
 
   saveButton.addEventListener("pointerdown", () => {
-    console.log("save called");
+    saveLocally();
   });
 
   // make the miinified ui be draggable without issues

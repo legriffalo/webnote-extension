@@ -108,9 +108,11 @@ function setupDrawingOnPointerDown() {
   console.log("drawing control added");
   canvas = document.getElementById("transparentOverlayCanvas");
   if (!canvas) {
-    // console.error("Transparent canvas not found!");
+    // If no canvas found then return early
+    // console.log("no cnavcas found")
     return;
   }
+
   // set up all canvas settings/data and variables to handle
   ctx = canvas.getContext("2d");
   let isDrawing = false;
@@ -245,6 +247,18 @@ function setupDrawingOnPointerDown() {
   canvas.addEventListener("pointerleave", stopDrawing);
 
   setTimeout(() => drawStoredPaths(), 500);
+}
+
+function deleteDrawings() {
+  console.log("Delete function was called");
+}
+
+function saveLocally() {
+  console.log("Save local function was called");
+}
+
+function shareToServer() {
+  console.log("Sent annotations to server?");
 }
 
 // Call this function after the transparent canvas has been added to the DOM

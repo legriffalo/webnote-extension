@@ -4,9 +4,43 @@
 paritcularly where only small numbers of utility classes were needed */
 @layer components {
   
-  #controls-box{
+  /* #controls-box{
+    all: unset;
     @apply  !flex !rounded-xl p-1 gap-1;
   }
+
+  #controls-box * {
+    all: unset; 
+  } */
+
+ #controls-box {
+    all: unset !important; /* ADD !important HERE */
+    /*
+      Re-apply critical layout properties with !important if they were reset
+      and you need them to be specifically controlled by your extension.
+      `display` is a common one that `all: unset` will reset to `initial` (inline).
+      `box-sizing` is also good to explicitly control.
+    */
+    display: flex !important; 
+    flex-direction: row !important; /* Or 'column' based on your layout */
+    box-sizing: border-box !important; /* Very important for predictable sizing */
+
+    @apply !flex !rounded-xl p-1 gap-1; 
+  }
+
+  /* Also apply to children if they are also inheriting unwanted styles */
+  #controls-box * {
+    all: unset !important; /* ADD !important HERE */
+    box-sizing: border-box !important; /* Children should also be predictable */
+  }
+
+
+  /* Reset all children within #controls-box */
+  #controls-box > * {
+    all: unset !important; 
+  }
+  /* --- End of reset styles --- */
+
   #controls-box .main{
     @apply h-[50vh] w-[33vw] p-1 bg-gray-500 flex flex-col gap-2 w-full rounded-xl;
   }
