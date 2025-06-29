@@ -36,7 +36,7 @@ async function injectHTMLFromFile(htmlFilePath, targetSelector) {
       return;
     }
     const htmlContent = await response.text();
-    // TODO need to make it select from shadowRoot
+    // TODO: need to make it select from shadowRoot
     const targetElement = webdrawShadowRoot.querySelector(targetSelector);
     // If needed this may be the best place to attach a shadow DOM
     if (targetElement) {
@@ -65,7 +65,7 @@ async function createControls() {
   extExists ? document.getElementById("webdraw-extensionRoot").remove() : null;
 
   // 2. If main child exusts remove
-  //TODO this can probably just be removed we'll see
+  //TODO: this can probably just be removed we'll see
   let controlsExists = document.getElementById("webdraw-controls-box");
   controlsExists
     ? document.getElementById("webdraw-controls-box").remove()
@@ -83,7 +83,7 @@ async function createControls() {
   // const controls = document.createElement("div");
   // controls.id = "webdraw-controls-box"; // Give it a unique ID
 
-  //TODO fix all of this!!!!!!
+  //TODO: fix all of this!!!!!!
   // 3. Create a shadow DOM for dynamically created elements to be appended
   var webdrawShadowRoot = extensionHost.attachShadow({ mode: "open" }); // 'open' allows JS access from outside
 
