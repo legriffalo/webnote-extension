@@ -15,6 +15,6 @@ document.getElementById("webdraw-minified").remove();
 document.getElementById("webdraw-full").remove();
 
 document.getElementById("transparentOverlayCanvas").remove();
-document.getElementById("controls-box").remove();
+document.getElementById("webdraw-controls-box").remove();
 document.removeEventListener("pointerup", detectDoubleTap(500));
 document.removeEventListener("keydown", doc_keyUp, true);

@@ -13,64 +13,58 @@ paritcularly where only small numbers of utility classes were needed */
     all: unset; 
   } */
 
- #controls-box {
-    all: unset !important; /* ADD !important HERE */
+ #webdraw-controls-box{
+    all: unset; 
+ 
     /*
       Re-apply critical layout properties with !important if they were reset
       and you need them to be specifically controlled by your extension.
       `display` is a common one that `all: unset` will reset to `initial` (inline).
       `box-sizing` is also good to explicitly control.
     */
-    display: flex !important; 
-    flex-direction: row !important; /* Or 'column' based on your layout */
-    box-sizing: border-box !important; /* Very important for predictable sizing */
+    
 
-    @apply !flex !rounded-xl p-1 gap-1; 
+    @apply !z-100000000000000 !fixed !top-[1vh] !left-[1vw] !flex !rounded-xl p-1 gap-1; 
   }
 
-  /* Also apply to children if they are also inheriting unwanted styles */
-  #controls-box * {
-    all: unset !important; /* ADD !important HERE */
-    box-sizing: border-box !important; /* Children should also be predictable */
-  }
 
 
   /* Reset all children within #controls-box */
-  #controls-box > * {
-    all: unset !important; 
+  #webdraw-controls-box #webdraw-full  * {
+    all: unset; 
   }
   /* --- End of reset styles --- */
 
-  #controls-box .main{
-    @apply h-[50vh] w-[33vw] p-1 bg-gray-500 flex flex-col gap-2 w-full rounded-xl;
+  #webdraw-full {
+    @apply !h-[50vh] !w-[33vw] !p-1 !bg-gray-500 !flex !flex-col !gap-2 !w-full !rounded-xl;
   }
-  #controls-box #header{
+  #webdraw-controls-box #webdraw-full > #header{
     @apply rounded-xl h-1/6 flex flex-row bg-red-400 items-center;
  }
-   #controls-box h1{
+   #webdraw-controls-box #webdraw-full #header > h1{
     @apply w-full text-2xl text-center text-white font-bold w-2/3;
   }
-  #controls-box .top-button{
+  #webdraw-controls-box #webdraw-full .top-button{
     @apply align-middle w-1/5 text-center align-middle w-full h-2/5 bg-gray-700 rounded-lg;
   }
 
-   #controls-box .webdraw-input-box{
+   #webdraw-controls-box #webdraw-full .webdraw-input-box{
     @apply !my-1 !h-2/3 !w-7/8 !p-2.5 !text-center !bg-gray-500 !border !border-gray-100 !text-white !text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-200 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
   }
 
-   #controls-box #webdraw-layers{
+   #webdraw-controls-box #webdraw-full #webdraw-full #webdraw-layers{
     @apply w-full h-2/3 m-auto border border-white rounded-lg flex flex-col items-center;
   }
 
-  #controls-box .ext-button {
-    @apply !w-full !bg-red-300 !hover:bg-red-800 !text-white !font-bold !py-2 px-4 rounded align-middle;
+  #webdraw-controls-box #webdraw-full .ext-button {
+    @apply !w-full !bg-red-300 hover:bg-red-800 !text-white !font-bold !py-2 px-4 rounded align-middle;
   }
 
-   #controls-box .hidden{
-    @apply invisible !w-15;
+   #webdraw-controls-box #webdraw-full .hidden{
+    @apply !invisible !w-15;
   }
 
-  #webdraw-minified-image{
+  #webdraw-full #webdraw-minified-image{
     @apply w-15 rounded-3xl border-solid !border-red-600 !border-5;
   }
 }

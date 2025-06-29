@@ -56,13 +56,12 @@ chrome.action.onClicked.addListener(async (tab) => {
         .then(() => {
           console.log("main script injected");
         });
-
-      await chrome.scripting
-        .insertCSS({
-          target: { tabId: tab.id },
-          files: ["css/output.css"],
-        })
-        .then(() => console.log("tailwind injected"));
+      // await chrome.scripting
+      //   .insertCSS({
+      //     target: { tabId: tab.id },
+      //     files: ["css/output.css"],
+      //   })
+      //   .then(() => console.log("tailwind injected"));
     } else if (nextState === "OFF") {
       await chrome.scripting
         .executeScript({

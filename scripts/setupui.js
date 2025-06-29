@@ -37,7 +37,7 @@ async function injectHTMLFromFile(htmlFilePath, targetSelector) {
     }
     const htmlContent = await response.text();
     const targetElement = document.querySelector(targetSelector);
-
+    // If needed this may be the best place to attach a shadow DOM
     if (targetElement) {
       // inject all html into element
       targetElement.innerHTML = htmlContent;
@@ -59,26 +59,42 @@ async function injectHTMLFromFile(htmlFilePath, targetSelector) {
 // Called to create a draggable control element for settings/share etc
 // called whenever intitialise is called in main file
 async function createControls() {
-  // 1. If it already exists from ON/OFF remove
-  let controlsExists = document.getElementById("controls-box");
-  controlsExists ? document.getElementById("controls-box").remove() : null;
+  // 1. If extension root already exists then remove it
+  let extExists = document.getElementById("webdraw-extensionRoot");
+  extExists ? document.getElementById("webdraw-extensionRoot").remove() : null;
 
-  // 2. Create the controls element
-  var controls = document.createElement("div");
-  controls.id = "controls-box";
+  // 2. If main child exusts remove
+  //Todo this can probably just be removed we'll see
+  let controlsExists = document.getElementById("webdraw-controls-box");
+  controlsExists
+    ? document.getElementById("webdraw-controls-box").remove()
+    : null;
 
-  // 3. Add innerHTML elements use class .controls to stop dragging on use
-  // controls.insertAdjacentHTML("afterbegin", `<div> TEST HERE </div>`);
-  injectHTMLFromFile("html/ui.html", "#controls-box");
+  // 2. Create the root for the shadow DOM
+  var extensionHost = document.createElement("div");
+  extensionHost.id = "webdraw-extensionRoot";
+  document.body.appendChild(extensionHost); // Append it to the body or a specific target
 
-  // add layers data to layer view through repeated injection of the layer.html
-  injectHTMLFromFile("html/layer.html", "#webdraw-layers-table");
+  // 3. Create a shadow DOM for dynamically created elements to be appended
+  const shadowRoot = extensionHost.attachShadow({ mode: "open" }); // 'open' allows JS access from outside
+  fetch(chrome.runtime.getURL("css/output.css"))
+    .then((response) => response.text())
+    .then((css) => {
+      styleElement.textContent = css;
+      shadowRoot.appendChild(styleElement);
 
+      shadowRoot.appendChild(styleElement);
+      // 4. Add innerHTML elements use class .controls to stop dragging on use
+      // controls.insertAdjacentHTML("afterbegin", `<div> TEST HERE </div>`);
+      injectHTMLFromFile("html/ui.html", "#webdraw-controls-box");
+      // add layers data to layer view through repeated injection of the layer.html
+      injectHTMLFromFile("html/layer.html", "#webdraw-layers-table");
+    });
   // 4. Set start position and styling
-  controls.style.position = "fixed"; // Cover the entire viewport
-  controls.style.top = "1vh";
-  controls.style.left = "1vw";
-  controls.style.zIndex = "10000000001"; // Ensure it's on top of other elements
+  // controls.style.position = "fixed"; // Cover the entire viewport
+  // controls.style.top = "1vh";
+  // controls.style.left = "1vw";
+  // controls.style.zIndex = "10000000001"; // Ensure it's on top of other elements
 
   // 4. Append it to the DOM (usually the body)
   document.body.appendChild(controls);
@@ -97,9 +113,9 @@ function setUpUIControls() {
   const colorPicker = document.getElementById("webdraw-color-picker");
   const thicknessSlider = document.getElementById("webdraw-thickness-slider");
   const opacitySlider = document.getElementById("webdraw-opacity-slider");
-  const deleteButton = document.getElementById("delete-button");
-  const shareButton = document.getElementById("share-button");
-  const saveButton = document.getElementById("save-button");
+  const deleteButton = document.getElementById("webdraw-delete-button");
+  const shareButton = document.getElementById("webdraw-share-button");
+  const saveButton = document.getElementById("webdraw-save-button");
 
   minified.addEventListener("doubletap", () => {
     minified.classList.add("hidden");

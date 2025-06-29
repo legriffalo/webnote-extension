@@ -1,0 +1,41 @@
+// 1. Create a host element for your extension in the main DOM
+const extensionHost = document.createElement("div");
+extensionHost.id = "your-extension-container"; // Give it a unique ID
+document.body.appendChild(extensionHost); // Append it to the body or a specific target
+
+// 2. Attach a Shadow Root to the host element
+const shadowRoot = extensionHost.attachShadow({ mode: "open" }); // 'open' allows JS access from outside
+
+// 3. Create a style element and append your compiled CSS content to it
+const styleElement = document.createElement("style");
+// You'll need to load your compiled CSS file's content here.
+// In a Chrome extension, you might fetch it or include it directly in your JS bundle.
+// Example (simplified - actual implementation depends on your build process):
+fetch(chrome.runtime.getURL("path/to/your/compiled-tailwind.css"))
+  .then((response) => response.text())
+  .then((css) => {
+    styleElement.textContent = css;
+    shadowRoot.appendChild(styleElement);
+
+    // 4. Create your actual #controls-box and other elements inside the Shadow Root
+    const controlsBox = document.createElement("div");
+    controlsBox.id = "controls-box";
+    // Add other elements and content to controlsBox as needed
+    controlsBox.innerHTML = `
+      <div class="main">
+        <div id="header">
+          <h1>My Extension</h1>
+          <button class="top-button">Settings</button>
+        </div>
+        <input type="text" class="webdraw-input-box" placeholder="Enter text">
+        <div id="webdraw-layers"></div>
+        <button class="ext-button">Do Something</button>
+      </div>
+    `;
+
+    shadowRoot.appendChild(controlsBox);
+
+    // Now, your CSS from the 'styleElement' will apply only within the shadowRoot
+    // and will be largely unaffected by the host page's styles.
+    // The `all: unset;` rules *within this appended CSS* will then be effective.
+  });

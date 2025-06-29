@@ -59,7 +59,7 @@ setTimeout(() => {
     return cl.contains("webdraw-controls");
   }
 
-  var box = document.getElementById("controls-box");
+  var box = document.getElementById("webdraw-controls-box");
   console.log(box);
 
   // track touch events and start the drag and drop for tablets
