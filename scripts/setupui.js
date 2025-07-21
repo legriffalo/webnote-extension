@@ -28,7 +28,7 @@ function detectDoubleTap(doubleTapMs) {
 document.addEventListener("pointerup", detectDoubleTap(300));
 
 //utility function ot inject html objects in to ui
-async function injectHTMLFromFile(htmlFilePath, targetSelector) {
+async function injectHTMLFromFile(root, htmlFilePath, targetSelector) {
   try {
     const response = await fetch(chrome.runtime.getURL(htmlFilePath));
     if (!response.ok) {
@@ -37,7 +37,7 @@ async function injectHTMLFromFile(htmlFilePath, targetSelector) {
     }
     const htmlContent = await response.text();
     // TODO: need to make it select from shadowRoot
-    const targetElement = webdrawShadowRoot.querySelector(targetSelector);
+    const targetElement = root.querySelector(targetSelector);
     // If needed this may be the best place to attach a shadow DOM
     if (targetElement) {
       // inject all html into element
@@ -107,10 +107,10 @@ async function createControls() {
     webdrawShadowRoot.appendChild(controls);
 
     // 6. Inject main UI HTML (ui.html) into controls
-    // Pass globalShadowRoot to the utility function
+    //TODO:  Pass globalShadowRoot to the utility function
     await injectHTMLFromFile(
       webdrawShadowRoot,
-      "./html/ui.html",
+      "../html/ui.html",
       "#controls-box"
     ); // Target the div *inside* shadowRoot
 
@@ -220,16 +220,24 @@ function setUpUIControls(shadowRoot) {
 // Adding all the required listeners to the UI
 function setUpUIControls() {
   // add listeners to the elements in the core ui
-  const minified = document.getElementById("webdraw-minified");
-  const fullSize = document.getElementById("webdraw-full");
-  const toggleButton = document.getElementById("webdraw-toggle-button");
-  const helpButton = document.getElementById("webdraw-help-button");
-  const colorPicker = document.getElementById("webdraw-color-picker");
-  const thicknessSlider = document.getElementById("webdraw-thickness-slider");
-  const opacitySlider = document.getElementById("webdraw-opacity-slider");
-  const deleteButton = document.getElementById("webdraw-delete-button");
-  const shareButton = document.getElementById("webdraw-share-button");
-  const saveButton = document.getElementById("webdraw-save-button");
+  const minified = webdrawShadowRoot.getElementById("webdraw-minified");
+  const fullSize = webdrawShadowRoot.getElementById("webdraw-full");
+  const toggleButton = webdrawShadowRoot.getElementById(
+    "webdraw-toggle-button"
+  );
+  const helpButton = webdrawShadowRoot.getElementById("webdraw-help-button");
+  const colorPicker = webdrawShadowRoot.getElementById("webdraw-color-picker");
+  const thicknessSlider = webdrawShadowRoot.getElementById(
+    "webdraw-thickness-slider"
+  );
+  const opacitySlider = webdrawShadowRoot.getElementById(
+    "webdraw-opacity-slider"
+  );
+  const deleteButton = webdrawShadowRoot.getElementById(
+    "webdraw-delete-button"
+  );
+  const shareButton = webdrawShadowRoot.getElementById("webdraw-share-button");
+  const saveButton = webdrawShadowRoot.getElementById("webdraw-save-button");
 
   minified.addEventListener("doubletap", () => {
     minified.classList.add("hidden");
