@@ -86,7 +86,8 @@ async function createControls() {
   //TODO: fix all of this!!!!!!
   // 3. Create a shadow DOM for dynamically created elements to be appended
   var webdrawShadowRoot = extensionHost.attachShadow({ mode: "open" }); // 'open' allows JS access from outside
-
+  // TODO: check this  expose the shadowRoot globally
+  window.getShadowRoot = () => shadowRoot;
   // 4. Fetch and append CSS
   try {
     const cssResponse = await fetch(chrome.runtime.getURL("./css/output.css"));

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extension Shadow DOM Example</title>
+    <!-- Load Tailwind CSS for styling the content inside the Shadow DOM -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Basic styling for the main page, outside the Shadow DOM */
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Style for the container of the shadow host */
+        .container {
+            background-color: #ffffff;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            /* For message box positioning */
+        }
+
+        /* Styles for the custom message box */
+        #messageBox {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            /* Hidden by default */
+            text-align: center;
+            max-width: 90%;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #messageBox.show {
+            display: block;
+            opacity: 1;
+        }
+
+        #messageBox button {
+            margin-top: 15px;
+            padding: 8px 16px;
+            background-color: #6366f1;
+            /* Indigo-500 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        #messageBox button:hover {
+            background-color: #4f46e5;
+            /* Indigo-600 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Main Page Content</h1>
+        <p class="text-gray-600 mb-6">Below is where the Shadow DOM content will be injected.</p>
+
+        <!-- The host element for our Shadow DOM -->
+        <div id="my-extension-shadow-host" class="p-4 border-2 border-dashed border-blue-300 rounded-lg">
+            <!-- Content within this div will be replaced by the Shadow DOM content -->
+            <p class="text-gray-500">Loading Shadow DOM...</p>
+        </div>
+    </div>
+
+    <!-- Custom Message Box HTML -->
+    <div id="messageBox">
+        <p id="messageBoxText"></p>
+        <button id="messageBoxCloseButton">OK</button>
+    </div>
+
+    <script>
+        // main.js equivalent: This script creates and manages the Shadow DOM.
+
+        // Function to show a custom message box instead of alert()
+        function showMessageBox(message) {
+            const msgBox = document.getElementById('messageBox');
+            const msgText = document.getElementById('messageBoxText');
+            const closeBtn = document.getElementById('messageBoxCloseButton');
+
+            if (msgBox && msgText && closeBtn) {
+                msgText.textContent = message;
+                msgBox.classList.add('show');
+
+                const closeHandler = () => {
+                    msgBox.classList.remove('show');
+                    closeBtn.removeEventListener('click', closeHandler); // Clean up listener
+                };
+                closeBtn.addEventListener('click', closeHandler);
+            } else {
+                console.error('Message box elements not found!');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const hostElement = document.getElementById('my-extension-shadow-host');
+
+            if (hostElement) {
+                // Check if a shadowRoot already exists to prevent re-attaching
+                if (!hostElement.shadowRoot) {
+                    // Attach an open Shadow DOM to the host element
+                    // 'open' mode allows JavaScript from the main document to access the shadow DOM.
+                    const shadowRoot = hostElement.attachShadow({ mode: 'open' });
+
+                    // Inject content into the Shadow DOM
+                    shadowRoot.innerHTML = `
+                        <!-- Content inside the Shadow DOM -->
+                        <div class="p-6 bg-gradient-to-r from-teal-500 to-green-600 text-white rounded-xl shadow-2xl max-w-sm mx-auto my-8 transform transition-all duration-300 hover:scale-105">
+                            <h2 class="text-3xl font-extrabold mb-3 text-center tracking-wide">
+                                <span class="inline-block animate-pulse mr-2">🚀</span>
+                                Shadow DOM Content
+                                <span class="inline-block animate-pulse ml-2">🚀</span>
+                            </h2>
+                            <p class="text-lg leading-relaxed text-center opacity-90 mb-6">
+                                This entire section is fully isolated from the main page's styles and scripts.
+                            </p>
+                            <button id="shadow-button" class="w-full px-6 py-3 bg-white text-green-700 font-bold rounded-lg shadow-md hover:bg-gray-100 transform transition-transform duration-200 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-75">
+                                Click Me (Inside Shadow DOM)
+                            </button>
+                        </div>
+                    `;
+
+                    // Directly expose the shadowRoot getter function on the window object.
+                    // This is simpler if it's the only global you need.
+                    window.getShadowRoot = () => shadowRoot;
+
+                    console.log('Shadow DOM created and its getter exposed directly on window.getShadowRoot.');
+                } else {
+                    // If shadowRoot already exists (e.g., page reloads), just expose it
+                    window.getShadowRoot = () => hostElement.shadowRoot;
+                    console.log('Shadow DOM already exists, exposed existing one directly on window.getShadowRoot.');
+                }
+            } else {
+                console.error('Shadow DOM host element not found!');
+            }
+        });
+    </script>
+
+    <script>
+        // anotherScript.js equivalent: This script accesses and interacts with the Shadow DOM.
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Function to try and access the Shadow DOM
+            const tryAccessShadowDom = () => {
+                // Directly check for the global getter function
+                if (typeof window.getShadowRoot === 'function') {
+                    const shadowRoot = window.getShadowRoot();
+
+                    if (shadowRoot) {
+                        console.log('Successfully accessed Shadow DOM from another script via window.getShadowRoot!');
+                        const shadowButton = shadowRoot.getElementById('shadow-button');
+                        if (shadowButton) {
+                            shadowButton.addEventListener('click', () => {
+                                // Use the custom message box instead of alert()
+                                showMessageBox('Button inside Shadow DOM clicked from external script!');
+                                // You can also modify content inside the shadow DOM
+                                const heading = shadowRoot.querySelector('h2');
+                                if (heading) {
+                                    heading.textContent = 'Interaction Confirmed!';
+                                }
+                            });
+                            console.log('Event listener attached to button inside Shadow DOM.');
+                        } else {
+                            console.warn('Button not found inside Shadow DOM.');
+                        }
+                    } else {
+                        console.warn('Shadow DOM not yet available. Retrying...');
+                        // If the shadowRoot isn't immediately available, retry after a short delay.
+                        setTimeout(tryAccessShadowDom, 100);
+                    }
+                } else {
+                    console.warn('window.getShadowRoot not yet available. Retrying...');
+                    setTimeout(tryAccessShadowDom, 100);
+                }
+            };
+
+            // Start trying to access the Shadow DOM
+            tryAccessShadowDom();
+        });
+    </script>
+</body>
+
+</html>
