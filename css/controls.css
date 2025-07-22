@@ -15,6 +15,7 @@ paritcularly where only small numbers of utility classes were needed */
 
  #webdraw-controls-box{
     all: unset; 
+    z-index:1000000000000000;
  
     /*
       Re-apply critical layout properties with !important if they were reset

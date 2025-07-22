@@ -87,7 +87,7 @@ async function createControls() {
   // 3. Create a shadow DOM for dynamically created elements to be appended
   var webdrawShadowRoot = extensionHost.attachShadow({ mode: "open" }); // 'open' allows JS access from outside
   // TODO: check this  expose the shadowRoot globally
-  window.getShadowRoot = () => shadowRoot;
+  window.getShadowRoot = () => webdrawShadowRoot;
   // 4. Fetch and append CSS
   try {
     const cssResponse = await fetch(chrome.runtime.getURL("./css/output.css"));
@@ -126,7 +126,7 @@ async function createControls() {
     // 8. Set up UI controls after all HTML is injected
     // Pass shadowRoot to setUpUIControls if it needs to query elements
     // Also ensure setUpUIControls is defined and handles elements within shadowRoot
-    setUpUIControls(webdrawShadowRoot); // Call directly without setTimeout after async operations
+    setUpUIControls(); // Call directly without setTimeout after async operations
     console.log("UI Controls setup complete.");
   } catch (error) {
     console.error("Error setting up extension UI:", error);
@@ -161,7 +161,9 @@ async function createControls() {
 // }
 
 // Example setUpUIControls - ensure it uses the passed shadowRoot
-function setUpUIControls(shadowRoot) {
+function setUpUIControls() {
+  var shadowRoot = window.getShadowRoot();
+
   if (!shadowRoot) {
     console.error("setUpUIControls: shadowRoot not provided.");
     return;
@@ -198,13 +200,13 @@ function setUpUIControls(shadowRoot) {
       e.preventDefault(); // Prevent text selection etc.
     });
 
-    shadowRoot.addEventListener("mousemove", (e) => {
+    controlsBox.addEventListener("mousemove", (e) => {
       if (!isDragging) return;
       controlsBox.style.left = `${e.clientX - offset.x}px`;
       controlsBox.style.top = `${e.clientY - offset.y}px`;
     });
 
-    shadowRoot.addEventListener("mouseup", () => {
+    controlsBox.addEventListener("mouseup", () => {
       isDragging = false;
       controlsBox.style.cursor = "grab";
     });
@@ -220,6 +222,8 @@ function setUpUIControls(shadowRoot) {
 
 // Adding all the required listeners to the UI
 function setUpUIControls() {
+  var webdrawShadowRoot = window.getShadowRoot();
+
   // add listeners to the elements in the core ui
   const minified = webdrawShadowRoot.getElementById("webdraw-minified");
   const fullSize = webdrawShadowRoot.getElementById("webdraw-full");

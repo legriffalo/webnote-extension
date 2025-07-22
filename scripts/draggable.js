@@ -59,7 +59,9 @@ setTimeout(() => {
     return cl.contains("webdraw-controls");
   }
 
-  var box = webdrawShadowRoot.getElementById("webdraw-controls-box");
+  //TODO: check this too
+
+  var box = document.getElementById("webdraw-extensionRoot");
   console.log(box);
 
   // track touch events and start the drag and drop for tablets
