@@ -1,0 +1,7 @@
+#shadow-dom-webdraw{
+    position:fixed;
+    z-index:9999999;
+    background-color: pink;
+    top:0;
+    left:0;
+}

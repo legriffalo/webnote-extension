@@ -32,6 +32,8 @@
             "html/ui.html", 
             "html/layer.html",
             "css/output.css",
+            "css/hostpage.css",
+
             "scripts/hotkeys.js"
         ]
     }]

@@ -48,9 +48,9 @@ chrome.action.onClicked.addListener(async (tab) => {
           target: { tabId: tab.id },
           files: [
             "scripts/setupui.js",
-            "content.js",
-            "scripts/draggable.js",
-            "scripts/hotkeys.js",
+            // "content.js",
+            // "scripts/draggable.js",
+            // "scripts/hotkeys.js",
           ],
         })
         .then(() => {
@@ -60,16 +60,17 @@ chrome.action.onClicked.addListener(async (tab) => {
       await chrome.scripting
         .insertCSS({
           target: { tabId: tab.id },
-          files: ["css/output.css"],
+          files: ["css/hostpage.css"],
         })
-        .then(() => console.log("tailwind injected"));
+        .then(() => console.log("base css injected"));
     } else if (nextState === "OFF") {
-      await chrome.scripting
-        .executeScript({
-          target: { tabId: tab.id },
-          files: ["scripts/clear.js"],
-        })
-        .then(() => console.log("script injected"));
+      console.log("clean up script needs to be called");
+      // await chrome.scripting
+      //   .executeScript({
+      //     target: { tabId: tab.id },
+      //     files: ["scripts/clear.js"],
+      //   })
+      //   .then(() => console.log("script injected"));
     }
   } catch {
     //extension should only fail on pages where there is no document i.e no web content
