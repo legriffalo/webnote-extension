@@ -58,6 +58,8 @@ const myShadowHost = document.createElement("div");
 myShadowHost.id = "shadow-dom-webdraw";
 document.body.appendChild(myShadowHost); // Add it to the main document body
 
+const draggable_ui = new Draggable(myShadowHost); // encapsulate ui in draggable box
+
 // Call with the HTML file (without the <link> tag) and the CSS file path
 injectHTMLFromFile(
   myShadowHost,
@@ -74,6 +76,82 @@ injectHTMLFromFile(
         activateButton.addEventListener("click", () => {
           alert("Save button clicked!");
         });
+      }
+      // add listeners to shadow dom elements
+
+      // Add listeners to the elements in the core UI
+      const minified = shadowRoot.querySelector("#webdraw-minified");
+      const fullSize = shadowRoot.querySelector("#webdraw-full");
+      const toggleButton = shadowRoot.querySelector("#webdraw-toggle-button");
+      const helpButton = shadowRoot.querySelector("#webdraw-help-button");
+      const colorPicker = shadowRoot.querySelector("#webdraw-color-picker");
+      const thicknessSlider = shadowRoot.querySelector(
+        "#webdraw-thickness-slider"
+      );
+      const opacitySlider = shadowRoot.querySelector("#webdraw-opacity-slider");
+      const deleteButton = shadowRoot.querySelector("#delete-button");
+      const shareButton = shadowRoot.querySelector("#share-button");
+      const saveButton = shadowRoot.querySelector("#save-button");
+
+      minified.addEventListener("doubletap", () => {
+        minified.classList.add("hidden");
+        fullSize.classList.remove("hidden");
+      });
+
+      toggleButton.addEventListener("click", () => {
+        console.log("toggle clicked");
+        fullSize.classList.add("hidden");
+        minified.classList.remove("hidden");
+      });
+
+      helpButton.addEventListener("click", () => {
+        console.log("help clicked ");
+        chrome.runtime.sendMessage({ message: "help" });
+      });
+
+      colorPicker.addEventListener("change", () => {
+        extensionState.color = colorPicker.value;
+      });
+
+      thicknessSlider.addEventListener("change", () => {
+        // extensionState.stroke = thicknessSlider.value;
+        // Replaced document.getElementById with shadowRoot.getElementById
+        shadowRoot.getElementById("webdraw-thickness-value").textContent =
+          thicknessSlider.value;
+      });
+
+      opacitySlider.addEventListener("change", () => {
+        // extensionState.opacity = opacitySlider.value;
+        // Replaced document.getElementById with shadowRoot.getElementById
+        shadowRoot.getElementById("webdraw-opacity-value").textContent =
+          opacitySlider.value;
+      });
+
+      deleteButton.addEventListener("pointerdown", () => {
+        deleteDrawings();
+      });
+
+      shareButton.addEventListener("pointerdown", () => {
+        shareToServer();
+      });
+
+      saveButton.addEventListener("pointerdown", () => {
+        saveLocally();
+      });
+
+      // Make the minified UI be draggable without issues
+      // Replaced document.getElementById with shadowRoot.getElementById
+      const draggableImage = shadowRoot.getElementById(
+        "webdraw-minified-image"
+      );
+
+      if (draggableImage) {
+        draggableImage.addEventListener("dragstart", (event) => {
+          // Prevent the browser's default drag-and-drop behavior for this image
+          event.preventDefault();
+        });
+      } else {
+        console.warn("Image with ID 'my-draggable-image' not found.");
       }
     }
   })

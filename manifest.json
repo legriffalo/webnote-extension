@@ -27,8 +27,8 @@
         "resources": [
             "images/icon48.png",
             "content.js",
+            "scripts/classes.js",
             "scripts/setupui.js",
-            "scripts/draggable.js",
             "html/ui.html", 
             "html/layer.html",
             "css/output.css",
