@@ -47,7 +47,9 @@ chrome.action.onClicked.addListener(async (tab) => {
         .executeScript({
           target: { tabId: tab.id },
           files: [
-            "scripts/classes.js",
+            "content.js",
+            "scripts/draggable.js",
+            "scripts/path.js",
             "scripts/setupui.js",
 
             // "scripts/draggable.js",

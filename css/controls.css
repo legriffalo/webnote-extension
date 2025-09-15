@@ -71,7 +71,7 @@ paritcularly where only small numbers of utility classes were needed */
   }
 
   #webdraw-minified-image{
-    @apply w-15 rounded-3xl border-solid !border-red-600 !border-5;
+    @apply w-15 h-15 rounded-3xl border-solid !border-red-600 !border-5;
   }
 }
 

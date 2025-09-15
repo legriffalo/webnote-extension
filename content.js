@@ -118,61 +118,57 @@ function setupDrawingOnPointerDown() {
   let isDrawing = false;
   let lastX = 0;
   let lastY = 0;
-  var newPath = {
-    resX: extensionState.resX,
-    resY: extensionState.resY,
-    path: [],
-  };
+  var newPath = new Path("red", 0.9, 3, ctx);
 
-  function drawStoredPaths() {
-    // check if there are stored paths to draw
-    // storedPaths = JSON.parse(localStorage.getItem("storedPaths"));
-    // use spread to shallow copy state data stored
-    storedPaths = [...extensionState.paths];
+  // function drawStoredPaths() {
+  //   // check if there are stored paths to draw
+  //   // storedPaths = JSON.parse(localStorage.getItem("storedPaths"));
+  //   // use spread to shallow copy state data stored
+  //   storedPaths = [...extensionState.paths];
 
-    // redraw from state
-    if (storedPaths.length > 0) {
-      console.log("previous annotations found redrawing");
-      console.log(storedPaths);
+  //   // redraw from state
+  //   if (storedPaths.length > 0) {
+  //     console.log("previous annotations found redrawing");
+  //     console.log(storedPaths);
 
-      storedPaths.forEach((path, index) => {
-        // cycle through each path stored in storePaths
-        ctx.beginPath();
-        // get the res for each path
-        let prevHeight = path.resX;
-        let prevWidth = path.resY;
-        // let yTransform = documentHeight - prevHeight;
-        // let xTransform = documentWidth / prevWidth;
-        // console.log(
-        //   "transformation due to screen change ",
-        //   xTransform,
-        //   yTransform
-        // );
-        let coords = path.path.map(([x, y]) => [x, y]);
-        if (coords.length > 0) {
-          ctx.moveTo(coords[0][0], coords[0][1]); // Move to the starting point
+  //     storedPaths.forEach((path, index) => {
+  //       // cycle through each path stored in storePaths
+  //       ctx.beginPath();
+  //       // get the res for each path
+  //       let prevHeight = path.resX;
+  //       let prevWidth = path.resY;
+  //       // let yTransform = documentHeight - prevHeight;
+  //       // let xTransform = documentWidth / prevWidth;
+  //       // console.log(
+  //       //   "transformation due to screen change ",
+  //       //   xTransform,
+  //       //   yTransform
+  //       // );
+  //       let coords = path.path.map(([x, y]) => [x, y]);
+  //       if (coords.length > 0) {
+  //         ctx.moveTo(coords[0][0], coords[0][1]); // Move to the starting point
 
-          for (let i = 1; i < coords.length; i++) {
-            // Start from the second point
-            const [x, y] = coords[i];
-            ctx.lineTo(x, y); // Draw a line to the current point
-          }
-          // ctx.strokeStyle = extensionState.color;
-          // ctx.lineWidth = extensionState.stroke;
-          // ctx.globalAlpha = extensionState.opacity;
-          ctx.strokeStyle = path.color;
-          ctx.lineWidth = path.stroke;
-          ctx.globalAlpha = path.opacity;
-          ctx.stroke();
-          // ctx.closePath();
-        } else {
-          console.log("skipped blank path");
-        }
-      });
-    } else {
-      storedPaths = [];
-    }
-  }
+  //         for (let i = 1; i < coords.length; i++) {
+  //           // Start from the second point
+  //           const [x, y] = coords[i];
+  //           ctx.lineTo(x, y); // Draw a line to the current point
+  //         }
+  //         // ctx.strokeStyle = extensionState.color;
+  //         // ctx.lineWidth = extensionState.stroke;
+  //         // ctx.globalAlpha = extensionState.opacity;
+  //         ctx.strokeStyle = path.color;
+  //         ctx.lineWidth = path.stroke;
+  //         ctx.globalAlpha = path.opacity;
+  //         ctx.stroke();
+  //         // ctx.closePath();
+  //       } else {
+  //         console.log("skipped blank path");
+  //       }
+  //     });
+  //   } else {
+  //     storedPaths = [];
+  //   }
+  // }
 
   function startDrawing(e) {
     isDrawing = true;
@@ -200,7 +196,7 @@ function setupDrawingOnPointerDown() {
     newPath.color = extensionState.color;
     newPath.stroke = extensionState.stroke;
     newPath.opacity = extensionState.opacity;
-    newPath.path.push([lastX, lastY]);
+    newPath.addCoordsaddCoords(lastX, lastY);
   }
 
   function stopDrawing() {
@@ -272,7 +268,6 @@ function initializeExtension() {
     // If element is loaded then build it out
     if (canvas) {
       clearInterval(canvasCheckInterval);
-      createControls();
       setupDrawingOnPointerDown();
 
       documentHeight = document.documentElement.scrollHeight;
