@@ -196,7 +196,7 @@ function setupDrawingOnPointerDown() {
     newPath.color = extensionState.color;
     newPath.stroke = extensionState.stroke;
     newPath.opacity = extensionState.opacity;
-    newPath.addCoordsaddCoords(lastX, lastY);
+    newPath.addCoords(lastX, lastY);
   }
 
   function stopDrawing() {
@@ -204,11 +204,7 @@ function setupDrawingOnPointerDown() {
     // push drawings to a store?
     // console.log(newPath);
     storedPaths.push(newPath);
-    newPath = {
-      resX: extensionState.resX,
-      resY: extensionState.resY,
-      path: [],
-    };
+    newPath = new Path();
     console.log(storedPaths);
     // localStorage.setItem("storedPaths", JSON.stringify(storedPaths));
 
@@ -242,7 +238,7 @@ function setupDrawingOnPointerDown() {
   canvas.addEventListener("pointerup", stopDrawing);
   canvas.addEventListener("pointerleave", stopDrawing);
 
-  setTimeout(() => drawStoredPaths(), 500);
+  // setTimeout(() => drawStoredPaths(), 500);
 }
 
 function deleteDrawings() {
