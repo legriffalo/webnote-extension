@@ -35,8 +35,9 @@
             "html/layer.html",
             "css/output.css",
             "css/hostpage.css",
+            "scripts/hotkeys.js",
+            "scripts/utilities.js"
 
-            "scripts/hotkeys.js"
         ]
     }]
     

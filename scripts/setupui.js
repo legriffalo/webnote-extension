@@ -111,18 +111,17 @@ injectHTMLFromFile(
 
       colorPicker.addEventListener("change", () => {
         extensionState.color = colorPicker.value;
+        console.log(extensionState);
       });
 
       thicknessSlider.addEventListener("change", () => {
-        // extensionState.stroke = thicknessSlider.value;
-        // Replaced document.getElementById with shadowRoot.getElementById
+        extensionState.stroke = thicknessSlider.value;
         shadowRoot.getElementById("webdraw-thickness-value").textContent =
           thicknessSlider.value;
       });
 
       opacitySlider.addEventListener("change", () => {
-        // extensionState.opacity = opacitySlider.value;
-        // Replaced document.getElementById with shadowRoot.getElementById
+        extensionState.opacity = opacitySlider.value;
         shadowRoot.getElementById("webdraw-opacity-value").textContent =
           opacitySlider.value;
       });

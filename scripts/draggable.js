@@ -101,7 +101,7 @@ element - Element to apply the draggable properties to
 
     // Iterate over the elements in the path to find the control class
     for (const element of path) {
-      console.log(element);
+      // console.log(element);
       // Check if the element has a class list
       if (element.classList && element.classList.contains("webdraw-controls")) {
         return true; // Found a control element, so ignore the drag

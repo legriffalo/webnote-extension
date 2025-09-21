@@ -118,7 +118,14 @@ function setupDrawingOnPointerDown() {
   let isDrawing = false;
   let lastX = 0;
   let lastY = 0;
-  var newPath = new Path("red", 0.9, 3, ctx);
+
+  //TODO could this move?
+  var newPath = new Path(
+    extensionState.color,
+    extensionState.opacity,
+    extensionState.stroke,
+    ctx
+  );
 
   // function drawStoredPaths() {
   //   // check if there are stored paths to draw
@@ -235,6 +242,21 @@ function setupDrawingOnPointerDown() {
   // Add event listeners to the canvas
   canvas.addEventListener("pointerdown", startDrawing);
   canvas.addEventListener("pointermove", drawLine);
+
+  let lastDrawTime = 0;
+  const interval = 50; // milliseconds
+
+  // add throtling to the draw to get smoother lines?
+  // canvas.addEventListener("pointermove", (event) => {
+  //   const currentTime = Date.now();
+
+  //   if (currentTime - lastDrawTime > interval) {
+  //     // This condition checks if enough time has passed since the last draw
+  //     drawLine(event);
+  //     lastDrawTime = currentTime;
+  //   }
+  // });
+
   canvas.addEventListener("pointerup", stopDrawing);
   canvas.addEventListener("pointerleave", stopDrawing);
 

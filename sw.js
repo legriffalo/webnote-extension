@@ -51,6 +51,7 @@ chrome.action.onClicked.addListener(async (tab) => {
             "scripts/draggable.js",
             "scripts/path.js",
             "scripts/setupui.js",
+            "scripts/utilities.js",
 
             // "scripts/draggable.js",
             // "scripts/hotkeys.js",
