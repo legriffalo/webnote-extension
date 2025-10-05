@@ -54,11 +54,11 @@ async function injectHTMLFromFile(
 }
 
 // --- Example Usage ---
-const myShadowHost = document.createElement("div");
+var myShadowHost = document.createElement("div");
 myShadowHost.id = "shadow-dom-webdraw";
 document.body.appendChild(myShadowHost); // Add it to the main document body
 
-const draggable_ui = new Draggable(myShadowHost); // encapsulate ui in draggable box
+var draggable_ui = new Draggable(myShadowHost); // encapsulate ui in draggable box
 
 // Call with the HTML file (without the <link> tag) and the CSS file path
 injectHTMLFromFile(

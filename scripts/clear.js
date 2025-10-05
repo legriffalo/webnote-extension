@@ -13,3 +13,4 @@ document.getElementById("transparentOverlayCanvas").remove();
 // document.removeEventListener("keydown", doc_keyUp, true);
 document.getElementById("shadow-dom-webdraw").remove();
 // shadowRoot.remove();
+Path = null;

@@ -1,3 +1,4 @@
+// Should this be added to session class?
 // handle hotkeys for extension
 // on keyboard call this function
 function doc_keyUp(e) {

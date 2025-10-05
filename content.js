@@ -241,21 +241,23 @@ function setupDrawingOnPointerDown() {
 
   // Add event listeners to the canvas
   canvas.addEventListener("pointerdown", startDrawing);
-  canvas.addEventListener("pointermove", drawLine);
+  // canvas.addEventListener("pointermove", drawline);
 
   let lastDrawTime = 0;
-  const interval = 50; // milliseconds
+  // const interval = 100; // milliseconds
 
-  // add throtling to the draw to get smoother lines?
-  // canvas.addEventListener("pointermove", (event) => {
-  //   const currentTime = Date.now();
+  // add throttling to the draw to get smoother lines?
+  canvas.addEventListener("pointermove", (event) => {
+    let interval = extensionState.stroke * 5;
+    console.log("throttling active");
+    const currentTime = Date.now();
 
-  //   if (currentTime - lastDrawTime > interval) {
-  //     // This condition checks if enough time has passed since the last draw
-  //     drawLine(event);
-  //     lastDrawTime = currentTime;
-  //   }
-  // });
+    if (currentTime - lastDrawTime > interval) {
+      // This condition checks if enough time has passed since the last draw
+      drawLine(event);
+      lastDrawTime = currentTime;
+    }
+  });
 
   canvas.addEventListener("pointerup", stopDrawing);
   canvas.addEventListener("pointerleave", stopDrawing);
@@ -265,6 +267,7 @@ function setupDrawingOnPointerDown() {
 
 function deleteDrawings() {
   console.log("Delete function was called");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
 function saveLocally() {

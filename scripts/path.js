@@ -1,5 +1,11 @@
-class Path {
-  /* 
+(function (window) {
+  // Check if the class is already defined on the 'window' (in our isolated scope)
+  if (window.Path) {
+    return; // Already loaded, exit.
+  }
+
+  class Path {
+    /* 
 ::DESCRIPTION::
 This class handles basic drawing functions
 
@@ -17,23 +23,25 @@ serialise - transforms this class in to a string representation to allow for sto
 deserialise - reconstitutes the class from storage string (redraws)
 */
 
-  constructor(color, opacity, weight, canvas) {
-    //@type {string}
-    this.color = color;
-    //@type {number}
-    this.opacity = opacity;
-    //@type {number}
-    this.weight = weight;
-    //@type {htmlm obj by id}
-    this.canvas = canvas;
-    //@type {Array<Array<number>>}
-    this.path = [];
+    constructor(color, opacity, weight, canvas) {
+      //@type {string}
+      this.color = color;
+      //@type {number}
+      this.opacity = opacity;
+      //@type {number}
+      this.weight = weight;
+      //@type {htmlm obj by id}
+      this.canvas = canvas;
+      //@type {Array<Array<number>>}
+      this.path = [];
+    }
+    // store coords
+    addCoords(x, y) {
+      this.path.push([x, y]);
+    }
+    drawPath() {
+      // may be better to access as a listener
+    }
   }
-  // store coords
-  addCoords(x, y) {
-    this.path.push([x, y]);
-  }
-  drawPath() {
-    // may be better to access as a listener
-  }
-}
+  window.Path = Path;
+})(window);
