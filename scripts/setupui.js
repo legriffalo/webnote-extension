@@ -98,13 +98,13 @@ injectHTMLFromFile(
         fullSize.classList.remove("hidden");
       });
 
-      toggleButton.addEventListener("click", () => {
+      toggleButton.addEventListener("pointerdown", () => {
         console.log("toggle clicked");
         fullSize.classList.add("hidden");
         minified.classList.remove("hidden");
       });
 
-      helpButton.addEventListener("click", () => {
+      helpButton.addEventListener("pointerdown", () => {
         console.log("help clicked ");
         chrome.runtime.sendMessage({ message: "help" });
       });
@@ -112,6 +112,17 @@ injectHTMLFromFile(
       colorPicker.addEventListener("change", () => {
         extensionState.color = colorPicker.value;
         console.log(extensionState);
+      });
+
+      colorPicker.addEventListener("pointerdown", (e) => {
+        console.log("colorpicker clicked");
+        //send click when  touched
+        if (e.pointerType === "touch" || e.pointerType === "pen") {
+          // Prevent default behavior (if any) to ensure our code runs
+          e.preventDefault();
+          // Manually trigger the click to force the native color picker dialog to open
+          colorPicker.click();
+        }
       });
 
       thicknessSlider.addEventListener("change", () => {

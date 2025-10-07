@@ -30,7 +30,7 @@
         }
       });
 
-      this.element.addEventListener("mousedown", (e) => {
+      this.element.addEventListener("pointerdown", (e) => {
         if (!this.controls(e)) {
           e.preventDefault(); // Prevents default browser drag behavior
 

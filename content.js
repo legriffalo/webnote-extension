@@ -198,7 +198,11 @@ function setupDrawingOnPointerDown() {
     ctx.lineWidth = extensionState.stroke; // You can customize the line width
     ctx.globalAlpha = extensionState.opacity;
     ctx.stroke();
-    [lastX, lastY] = [e.clientX, e.clientY + offSetY];
+    try {
+      [lastX, lastY] = [e.clientX, e.clientY + offSetY];
+    } catch {
+      [lastX, lastY] = [e.touches[0].clientX, e.touches[0].clientY + offSetY];
+    }
     // update the path object
     newPath.color = extensionState.color;
     newPath.stroke = extensionState.stroke;
@@ -207,6 +211,7 @@ function setupDrawingOnPointerDown() {
   }
 
   function stopDrawing() {
+    console.log("-------STOPPED DRAWING-------");
     isDrawing = false;
     // push drawings to a store?
     // console.log(newPath);
@@ -240,14 +245,36 @@ function setupDrawingOnPointerDown() {
   }
 
   // Add event listeners to the canvas
-  canvas.addEventListener("pointerdown", startDrawing);
-  // canvas.addEventListener("pointermove", drawline);
+  canvas.addEventListener("pointerdown", (event) => {
+    event.preventDefault();
+    startDrawing(event);
+  });
+
+  // canvas.addEventListener("ontouchstart", (event) => {
+  //   event.preventDefault();
+  //   startDrawing(event);
+  // });
 
   let lastDrawTime = 0;
   // const interval = 100; // milliseconds
 
   // add throttling to the draw to get smoother lines?
   canvas.addEventListener("pointermove", (event) => {
+    event.preventDefault();
+    let interval = extensionState.stroke * 5;
+    console.log("throttling active");
+    const currentTime = Date.now();
+
+    if (currentTime - lastDrawTime > interval) {
+      // This condition checks if enough time has passed since the last draw
+      drawLine(event);
+      lastDrawTime = currentTime;
+    }
+  });
+
+  // add throttling to the draw to get smoother lines?
+  canvas.addEventListener("touchmove", (event) => {
+    event.preventDefault();
     let interval = extensionState.stroke * 5;
     console.log("throttling active");
     const currentTime = Date.now();
